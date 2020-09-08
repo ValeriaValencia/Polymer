@@ -1,0 +1,6 @@
+{
+  "name": "preview-cv",
+  "short_name": "preview-cv",
+  "start_url": "/",
+  "display": "standalone"
+}

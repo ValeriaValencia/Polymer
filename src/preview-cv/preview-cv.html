@@ -1,0 +1,185 @@
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../../bower_components/polymer/lib/elements/dom-repeat.html">
+<link rel="import" href="../../bower_components/paper-card/paper-card.html">
+<link rel="import" href="./shared-styles.html">
+<link rel="import" href="../../bower_components/iron-icon/iron-icon.html">
+<link rel="import" href="../../bower_components/iron-icons/iron-icons.html">
+<link rel="import" href="../../bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../../bower_components/paper-input/paper-textarea.html">
+<link rel="import" href="../../bower_components/paper-slider/paper-slider.html">
+
+<dom-module id="preview-cv">
+  <template>
+    <style include="shared-styles">
+
+    </style>
+    <paper-card heading="Valeria Irisel" elevation= 5 class="first-card">
+      <div class="card-content">
+        <h3>Contacto:</h3> <p>[[cel]]</p><p>[[email]]</p>
+        <h3>Edad:</h3><p> [[edad]]</p>
+        <h3>Cumpleaños:</h3> <p>[[cumple]]</p>
+        <template is="dom-if" if="{{viajar}}">
+          <h3>Disponible para viajar:</h3> 
+          <p>Disponible <iron-icon icon="check"></iron-icon></p>
+        </template>
+          
+        <template is="dom-repeat" items="{{skills}}">
+          <h3>Skill: {{item.nombre}}</h3> 
+          <p>Nivel: {{item.nivel}}</p>
+          <!-- <paper-progress value="{{item.nivel}}"></paper-progress> -->
+          <paper-slider value="{{item.nivel}}"></paper-slider>
+          <p>Color: {{item.color}}</p>
+        </template>
+      </div>
+    </paper-card>
+    
+    <paper-card heading="Información" elevation= 5 class="second-card">
+      <div class="card-content">
+        <section>
+          <template is="dom-if" if="{{editable}}">
+            <div class="between">
+              <h3>Bio:</h3>
+              <paper-icon-button icon="check" on-click="finalizarEdicion"></paper-icon-button>
+            </div>
+            <paper-textarea value="{{bio}}"></paper-textarea>
+          </template>
+          <template is="dom-if" if="{{!editable}}">
+            <div class="between">
+              <h3>Bio:</h3>
+              <paper-icon-button icon="create" on-click="editar"></paper-icon-button>
+            </div>
+            <p> [[bio]]</p>
+          </template>
+        </section>
+        <section>
+          <div class="card-actions">
+            <h3>Educación</h3>
+          <template is="dom-repeat" items="{{educacion}}">
+            <template is="dom-if" if="{{editableEducacion}}">
+              <div class="between">
+                <paper-input value={{item.nombreEscuela}}></paper-input>
+                <paper-icon-button icon="check" on-click="finalizarEdicionEducacion"></paper-icon-button>
+              </div>
+              <paper-input value={{item.titulo}}></paper-input>
+              <paper-input value={{item.periodo}}></paper-input>
+            </template>
+            <template is="dom-if" if="{{!editableEducacion}}">
+              <div class="between">
+                <p><strong>{{item.nombreEscuela}}</strong></p>
+                <paper-icon-button icon="create" on-click="editarEducacion"></paper-icon-button>
+              </div>
+              <p>{{item.titulo}}</p>
+              <p>{{item.periodo}}</p>
+              <hr>
+            </template>
+            
+          </template>
+        </div>
+        </section>
+
+        <section id="experiencia">
+          <h3>Experiencia</h3>
+
+          <template is="dom-repeat" items="{{experiencia}}">
+            <div class="card-actions">
+
+              <template is="dom-if" if="{{editableExperiencia}}">
+                <div class="between">
+                  <paper-input value="{{item.nombreEmpresa}}"></paper-input>
+                  <paper-icon-button icon="check" on-click="finalizarEdicionExperiencia"></paper-icon-button>
+                </div>
+                <paper-input value="{{item.puesto}}"></paper-input>
+                <paper-input value="{{item.inicio}}"></paper-input>
+                <paper-input value="{{item.fin}}"></paper-input>
+              </template>
+
+              <template is="dom-if" if="{{!editableExperiencia}}">
+                <div class="between">
+                  <p><strong>{{item.nombreEmpresa}}</strong></p>
+                  <paper-icon-button icon="create" on-click="editarExperiencia"></paper-icon-button>
+                </div>
+                  <p>{{item.puesto}}</p>
+                  <p>{{item.inicio}} - {{item.fin}}</p>
+                  <hr>
+              </template>
+
+            </div>
+          </template>
+        </section>
+      </div>
+    </paper-card>
+  </template>
+
+  <script>
+    /**
+     * @customElement
+     * @polymer
+     */
+    class PreviewCv extends Polymer.Element {
+      static get is() { return 'preview-cv'; }
+      static get properties() {
+        return {
+          prop1: {
+            type: String,
+            value: 'preview-cv'
+          },
+          nombre: String,
+          cel: Number,
+          email: String,
+          edad: Number,
+          cumple: String,
+          skills: {
+            type: Array,
+            value: []
+          },
+          educacion: {
+            type: Array,
+            value: []
+          },
+          bio: String,
+          editable: {
+            type :Boolean,
+            value: false
+          },
+          editableExperiencia: {
+            type: Boolean,
+            value: false
+          },
+          editableEducacion: {
+            type: Boolean,
+            value: false
+          },
+          viajar: {
+            type: Boolean
+          },
+          experiencia: {
+            type:Array,
+            value: []
+          }
+        }
+      }
+      editar(){
+        this.editable = true;
+      }
+      finalizarEdicion() {
+        this.editable = false
+      }
+      editarExperiencia(){
+        this.editableExperiencia = true;
+      }
+      finalizarEdicionExperiencia() {
+        this.editableExperiencia = false
+      }
+      editarEducacion(){
+        this.editableEducacion = true;
+      }
+      finalizarEdicionEducacion() {
+        this.editableEducacion = false
+      }
+
+    }
+
+    window.customElements.define(PreviewCv.is, PreviewCv);
+  </script>
+</dom-module>
